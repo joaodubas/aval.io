@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sample experiment with react</title>
+  <script src="scripts/react.js"></script>
+  <script src="scripts/jsx.js"></script>
+</head>
+<body>
+  <div id="content"></div>
+  <script type="text/jsx">
+  (function (wdw, doc) {
+    var BMIBox = React.createClass({
+      handleSubmit: function(payload) {
+        var inlinePayload = Object
+          .keys(payload)
+          .map(k => k + "=" + payload[k])
+          .join("&");
+        var url = `/bmi?${inlinePayload}`;
+        fetch(url)
+          .then(status)
+          .then(text)
+          .then(this.updateState)
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      updateState: function (response) {
+        this.setState({
+          result: response
+        });
+      },
+      getInitialState: function () {
+        return {
+          result: "no data so far"
+        }
+      },
+      render: function () {
+        return (
+          <div className="assess-box">
+            <h1>Body mass index</h1>
+            <AssessResult result={this.state.result}></AssessResult>
+            <BMIForm onBMISubmit={this.handleSubmit}></BMIForm>
+          </div>
+        );
+      }
+    });
+
+    var WTHBox = React.createClass({
+      handleSubmit: function (payload) {
+        var inlinePayload = Object
+          .keys(payload)
+          .map(k => k + "=" + payload[k])
+          .join("&");
+        var url = `/wth?${inlinePayload}`;
+        fetch(url)
+          .then(status)
+          .then(text)
+          .then(this.updateState)
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      updateState: function (response) {
+        this.setState({
+          result: response
+        });
+      },
+      getInitialState: function () {
+        return {
+          result: "not data so far"
+        };
+      },
+      render: function () {
+        return (
+          <div className="assess-box">
+            <h1>Waist to hip ratio</h1>
+            <AssessResult result={this.state.result}></AssessResult>
+            <WTHForm onWTHSubmit={this.handleSubmit}></WTHForm>
+          </div>
+        );
+      }
+    });
+
+    var AssessResult = React.createClass({
+      render: function () {
+        return (
+          <div className="assess-result">
+            <pre>{this.props.result}</pre>
+          </div>
+        )
+      }
+    });
+
+    var BMIForm = React.createClass({
+      handleChangeFields: function (e) {
+        var key = e.target.name;
+        var value = e.target.value.trim();
+        this.setState(updateState(key, value, this.state));
+      },
+      handleSubmit: function (e) {
+        e.preventDefault();
+        this.props.onBMISubmit(this.state);
+        this.setState({
+          weight: "",
+          height: ""
+        });
+
+        return;
+      },
+      getInitialState: function () {
+        return {
+          weight: "",
+          height: ""
+        }
+      },
+      render: function () {
+        return (
+          <div className="assess-form">
+            <form method="get" action="/bmi" onSubmit={this.handleSubmit}>
+              <AnthropometricFields
+                  weight={this.state.weight}
+                  height={this.state.height}
+                  onChangeFields={this.handleChangeFields}></AnthropometricFields>
+              <div><input type="submit" value="GO" /></div>
+            </form>
+          </div>
+        )
+      }
+    });
+
+    var WTHForm = React.createClass({
+      handleChangeFields: function (e) {
+        var key = e.target.name;
+        var value = e.target.value.trim();
+        this.setState(updateState(key, value, this.state));
+        console.log(this.state);
+      },
+      handleSubmit: function (e) {
+        e.preventDefault();
+        this.props.onWTHSubmit(this.state);
+        this.setState({
+          fullname: "",
+          birth: "",
+          gender: "",
+          date: ""
+        });
+        return;
+      },
+      getInitialState: function () {
+        return {
+          fullname: "",
+          birth: "",
+          gender: "",
+          date: ""
+        }
+      },
+      render: function () {
+        return (
+          <div className="assess-form">
+            <form method="get" action="/wth" onSubmit={this.handleSubmit}>
+              <PersonFields
+                  fullname={this.state.fullname}
+                  birth={this.state.birth}
+                  gender={this.state.gender}
+                  onChangeFields={this.handleChangeFields}></PersonFields>
+              <AssessFields
+                  date={this.state.date}
+                  onChangeFields={this.handleChangeFields}></AssessFields>
+              <div><input type="submit" value="GO" /></div>
+            </form>
+          </div>
+        );
+      }
+    });
+
+    var PersonFields = React.createClass({
+      render: function () {
+        return (
+          <fieldset onChange={this.props.onChangeFields}>
+            <legend>Person</legend>
+            <div><input
+                type="text"
+                name="fullname"
+                value={this.props.fullname}
+                placeholder="full name"/></div>
+            <div><input
+                type="text"
+                name="birth"
+                value={this.props.birth}
+                placeholder="birthday (yyyy-MM-dd)" /></div>
+            <div>
+              <select name="gender" selected={this.props.gender}>
+                <option name="" value="">---</option>
+                <option name="male" value="0">Male</option>
+                <option name="female" value="1">Female</option>
+              </select>
+            </div>
+          </fieldset>
+        );
+      }
+    });
+
+    var AssessFields = React.createClass({
+      render: function () {
+        return (
+          <fieldset onChange={this.props.onChangeFields}>
+            <legend>Assessment</legend>
+            <div><input
+                type="text"
+                name="date"
+                value={this.props.date}
+                placeholder="date (yyyy-MM-dd)" /></div>
+          </fieldset>
+        );
+      }
+    });
+
+    var AnthropometricFields = React.createClass({
+      render: function () {
+        return (
+          <fieldset onChange={this.props.onChangeFields}>
+            <legend>Anthropometric</legend>
+            <div><input
+                type="text"
+                name="weight"
+                value={this.props.weight}
+                placeholder="weight (kg)" /></div>
+            <div><input
+                type="text"
+                name="height"
+                value={this.props.height}
+                placeholder="height (cm)" /></div>
+          </fieldset>
+        );
+      }
+    });
+
+    function status(response) {
+      if (response.status >= 200 && response.status < 300) {
+        return Promise.resolve(response);
+      } else {
+        return Promise.reject(new Error(response.statusText));
+      }
+    }
+
+    function text(response) {
+      return response.text();
+    }
+
+    function updateState(key, value, currState) {
+      var state = {}
+      Object
+        .keys(currState)
+        .map(k => state[k] = key === k ? value : currState[k]);
+      return state;
+    }
+    React.render(
+      <div>
+        <BMIBox></BMIBox>
+        <WTHBox></WTHBox>
+      </div>,
+      doc.getElementById("content")
+    );
+  })(window, window.document);
+  </script>
+</body>
+</html>
