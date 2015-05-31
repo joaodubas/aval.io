@@ -9,10 +9,6 @@ insert_final_new_line = false
 [*.go]
 indent_style = tab
 
-[*.yml]
-indent_style = space
-indent_size = 2
-
-[*.html]
+[*.{yml,html,js,css}]
 indent_style = space
 indent_size = 2
