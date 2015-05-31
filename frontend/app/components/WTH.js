@@ -1,4 +1,6 @@
 import React from "react/addons";
+import {AssessResult, PersonFields, AssessFields} from "./Assess";
+import {updateStat} from "../helper";
 
 export class WTHBox extends React.Component {
   handleSubmit(payload) {
@@ -41,7 +43,6 @@ export class WTHForm extends React.Component {
     var key = e.target.name;
     var value = e.target.value.trim();
     this.setState(updateState(key, value, this.state));
-    console.log(this.state);
   }
   handleSubmit(e) {
     e.preventDefault();

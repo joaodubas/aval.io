@@ -1,5 +1,6 @@
 import React from "react/addons";
 import {AssessResult} from "./Assess";
+import {updateState} from "../helper";
 
 export class BMIBox extends React.Component {
   handleSubmit(payload) {
