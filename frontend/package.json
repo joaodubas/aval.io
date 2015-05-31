@@ -4,7 +4,10 @@
   "description": "Physical measurement web interface",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd .. && go run *.go",
+    "webpack": "./node_modules/.bin/webpack --config config/webpack.js",
+    "webpack-watch": "./node_modules/.bin/webpack --config config/webpack.js --watch --colors"
   },
   "repository": {
     "type": "git",
