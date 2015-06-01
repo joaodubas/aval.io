@@ -13,7 +13,8 @@ func main() {
 	http.HandleFunc("/bmi", errHandler(bmiHandler{}))
 	http.HandleFunc("/wth", errHandler(wthHandler{}))
 	http.HandleFunc("/cin", errHandler(cinHandler{}))
-	http.Handle("/", http.FileServer(http.Dir("./static")))
+	http.Handle("/dist/", http.StripPrefix("/dist/", http.FileServer(http.Dir("frontend/dist/"))))
+	http.Handle("/", http.FileServer(http.Dir("frontend/src/client")))
 
 	fmt.Println("Started server")
 	http.ListenAndServe("127.0.0.1:9080", nil)
