@@ -1,8 +1,15 @@
 import React from "react/addons";
 import {AssessResult} from "./Assess";
+import {AnthropometricFields} from "./Anthropometric";
 import {updateState} from "../helper";
 
 export class BMIBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      result: "no data so far"
+    };
+  }
   handleSubmit(payload) {
     var inlinePayload = Object
       .keys(payload)
@@ -22,11 +29,6 @@ export class BMIBox extends React.Component {
       result: response
     });
   }
-  getInitialState() {
-    return {
-      result: "no data so far"
-    }
-  }
   render() {
     return (
       <div className="assess-box">
@@ -39,6 +41,13 @@ export class BMIBox extends React.Component {
 }
 
 export class BMIForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      weight: "",
+      height: ""
+    };
+  }
   handleChangeFields(e) {
     var key = e.target.name;
     var value = e.target.value.trim();
@@ -54,12 +63,6 @@ export class BMIForm extends React.Component {
 
     return;
   }
-  getInitialState() {
-    return {
-      weight: "",
-      height: ""
-    }
-  }
   render() {
     return (
       <div className="assess-form">
@@ -71,7 +74,7 @@ export class BMIForm extends React.Component {
           <div><input type="submit" value="GO" /></div>
         </form>
       </div>
-    )
+    );
   }
 }
 

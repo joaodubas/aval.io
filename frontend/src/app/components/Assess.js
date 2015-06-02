@@ -51,4 +51,3 @@ export class AssessResult extends React.Component {
     );
   }
 }
-

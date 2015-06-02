@@ -3,6 +3,12 @@ import {AssessResult, PersonFields, AssessFields} from "./Assess";
 import {updateStat} from "../helper";
 
 export class WTHBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      result: "not data so far"
+    };
+  }
   handleSubmit(payload) {
     var inlinePayload = Object
       .keys(payload)
@@ -22,11 +28,6 @@ export class WTHBox extends React.Component {
       result: response
     });
   }
-  getInitialState() {
-    return {
-      result: "not data so far"
-    };
-  }
   render() {
     return (
       <div className="assess-box">
@@ -39,6 +40,15 @@ export class WTHBox extends React.Component {
 }
 
 export class WTHForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fullname: "",
+      birth: "",
+      gender: "",
+      date: ""
+    };
+  }
   handleChangeFields(e) {
     var key = e.target.name;
     var value = e.target.value.trim();
@@ -54,14 +64,6 @@ export class WTHForm extends React.Component {
       date: ""
     });
     return;
-  }
-  getInitialState() {
-    return {
-      fullname: "",
-      birth: "",
-      gender: "",
-      date: ""
-    }
   }
   render() {
     return (
